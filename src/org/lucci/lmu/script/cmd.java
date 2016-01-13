@@ -61,7 +61,7 @@ public class cmd extends LmuScript
 				else
 				{
 					byte[] inputData = inputFile.getContent();
-					Model model = modelFactory.createModel(inputData);
+					Model model = modelFactory.createModel(inputData);//generer pdf
 
 					printMessage(model.getEntities().size() + " entities and " + model.getRelations().size() + " relations\n");
 

@@ -36,7 +36,8 @@ public class Main {
 	
 	private static File checkInput(String input) throws IOException {
 		String extension = FileChooser.getFileExtension(input);
-		if (extension.equals("jar")) {
+		if (extension.equals("jar")
+				|| extension.equals("java")) {
 			return new File(input);
 		}
 		
@@ -71,8 +72,7 @@ public class Main {
 			output = checkOutput(outputFileName);
 			
 			// Create Model
-			LmuParser parser = LmuParser.getParser();
-			diagram = parser.createModel("load " + input.getAbsolutePath());
+			diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
 			
 			// Export Model
 			export(diagram, output);

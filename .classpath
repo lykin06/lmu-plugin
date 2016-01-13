@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/home/mathieu/Documents/Polytech_SI5/reverse_eng/toools.jar"/>
-	<classpathentry kind="lib" path="/home/mathieu/Documents/Polytech_SI5/reverse_eng/java4unix.jar"/>
-	<classpathentry kind="lib" path="/home/mathieu/Documents/Polytech_SI5/reverse_eng/jfig.jar"/>
-	<classpathentry kind="lib" path="/home/mathieu/Documents/Polytech_SI5/reverse_eng/com.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="/home/louis/Desktop/lib/com.jar"/>
+	<classpathentry kind="lib" path="/home/louis/Desktop/lib/java4unix.jar"/>
+	<classpathentry kind="lib" path="/home/louis/Desktop/lib/jfig.jar"/>
+	<classpathentry kind="lib" path="/home/louis/Desktop/lib/toools.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
