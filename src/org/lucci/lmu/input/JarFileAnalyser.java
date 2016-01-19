@@ -10,6 +10,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,9 +64,7 @@ public class JarFileAnalyser extends ModelFactory
 			// create a jar file on the disk from the binary data
 			RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
 			jarFile.setContent(data);
-
 			ClassLoader classLoader = new URLClassLoader(new URL[] { jarFile.toURL() });
-
 			ClassPath classContainers = new ClassPath();
 			classContainers.add(new ClassContainer(jarFile, classLoader));
 

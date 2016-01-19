@@ -3,13 +3,19 @@ package org.lucci.lmu;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.lucci.lmu.gui.FileChooser;
+import org.lucci.lmu.input.JarFileAnalyser;
 import org.lucci.lmu.input.LmuParser;
 import org.lucci.lmu.input.ModelException;
+import org.lucci.lmu.input.ModelFactory;
 import org.lucci.lmu.input.ParseError;
 import org.lucci.lmu.output.AbstractWriter;
 import org.lucci.lmu.output.WriterException;
+
+import com.sun.xml.internal.bind.v2.model.impl.ModelBuilder;
 
 public class Main {
 
@@ -72,8 +78,10 @@ public class Main {
 			output = checkOutput(outputFileName);
 			
 			// Create Model
-			diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
-			
+			//diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
+			JarFileAnalyser jf = (JarFileAnalyser) JarFileAnalyser.getModelFactory("jar");
+			diagram = jf.createModel(Files.readAllBytes(Paths.get(inputFileName)));
+					
 			// Export Model
 			export(diagram, output);
 			
@@ -83,9 +91,6 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ModelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
