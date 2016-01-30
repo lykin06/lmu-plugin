@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -57,13 +59,14 @@ public class Analyzer extends ModelFactory implements Analysis {
 	}
 
 	@Override
-	public Model createModel(byte[] data) throws ParseError
+	public Model createModel(String filePath) throws ParseError
 	{
 		
 
 		try
 		{
 
+			byte[] data = Files.readAllBytes(Paths.get(filePath));
 			// create a jar file on the disk from the binary data
 			RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
 			jarFile.setContent(data);
@@ -135,5 +138,4 @@ public class Analyzer extends ModelFactory implements Analysis {
 		byte[] data = FileUtilities.getFileContent(file);
 		return createModel(data);
 	}
-
 }

@@ -15,6 +15,8 @@ import org.lucci.lmu.output.WriterException;
 
 import com.sun.xml.internal.bind.v2.model.impl.ModelBuilder;
 
+import analysis.Analyzer;
+
 public class Main {
 
 	/**
@@ -77,7 +79,7 @@ public class Main {
 			
 			// Create Model
 			//diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
-			JarFileAnalyser jf = (JarFileAnalyser) JarFileAnalyser.getModelFactory("jar");
+			Analyzer jf = (Analyzer) Analyzer.getModelFactory("analyzer");
 			//diagram = jf.createModel(Files.readAllBytes(Paths.get(inputFileName)));
 			diagram = jf.createModel(inputFileName);
 					

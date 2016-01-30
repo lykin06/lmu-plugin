@@ -31,7 +31,7 @@ public class ModelBuilder {
 
 
 	
-	Model build(List <Class<?>> classes) {
+	public Model build(List <Class<?>> classes) {
 		primitiveMap = new HashMap<Class<?>, Entity>();
 		entity_class = new HashMap<Entity, Class<?>>();
 		

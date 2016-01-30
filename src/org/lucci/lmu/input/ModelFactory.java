@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.lucci.lmu.Model;
 
+import analysis.Analyzer;
+
 /*
  * Created on Oct 11, 2004
  */
@@ -19,7 +21,7 @@ public abstract class ModelFactory
 
 	static
 	{
-		factoryMap.put("jar", new JarFileAnalyser());
+		factoryMap.put("analyzer", new Analyzer());
 	}
 
 	public static ModelFactory getModelFactory(String type)
