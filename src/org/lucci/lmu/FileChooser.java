@@ -1,4 +1,4 @@
-package org.lucci.lmu.gui;
+package org.lucci.lmu;
 
 import java.io.File;
 

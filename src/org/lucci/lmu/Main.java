@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.lucci.lmu.gui.FileChooser;
 import org.lucci.lmu.input.JarFileAnalyser;
 import org.lucci.lmu.input.LmuParser;
 import org.lucci.lmu.input.ModelException;
