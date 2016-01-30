@@ -19,8 +19,6 @@ public abstract class ModelFactory
 
 	static
 	{
-		factoryMap.put(null, LmuParser.getParser());
-		factoryMap.put("lmu", LmuParser.getParser());
 		factoryMap.put("jar", new JarFileAnalyser());
 	}
 

@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.lucci.lmu.input.JarFileAnalyser;
-import org.lucci.lmu.input.LmuParser;
 import org.lucci.lmu.input.ModelException;
 import org.lucci.lmu.input.ModelFactory;
 import org.lucci.lmu.input.ParseError;
