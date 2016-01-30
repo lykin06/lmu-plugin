@@ -87,7 +87,8 @@ public class Main {
 				case "jar" :
 						diagram = analyzer.jarAnalysis(inputFileName);
 						break;
-					
+				default :
+					break;					
 			}
 					
 			// Export Model

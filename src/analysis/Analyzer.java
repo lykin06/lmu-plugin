@@ -42,9 +42,7 @@ public class Analyzer extends ModelFactory implements Analysis {
 	}
 	
 	@Override
-	public Model classAnalysis(String path) {
-		RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
-		//jarFile.setContent(data);
+	public Model classAnalysis(String path) throws ParseError {
 		return null;
 	}
 
