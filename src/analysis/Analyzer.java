@@ -26,32 +26,51 @@ import toools.io.file.RegularFile;
 
 public class Analyzer extends ModelFactory implements Analysis {
 
-	@Override
-	public void classAnalysis(String path, List<Class<?>> classes) {
-		RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
-		jarFile.setContent(data);
-		
-	}
-
-	@Override
-	public void packageAnalysis(String path, List<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void projectAnalysis(String path, List<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void jarAnalysis(String path, List<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private Collection<RegularFile> knownJarFiles = new HashSet<RegularFile>();
+	private Model model;
+	private ModelBuilder modelBuilder;
+	private List<Class<?>> classes;
+	ClassPath classContainer;
+	ClassLoader classLoader;
+	RegularFile tempFile;
+	
+	public Analyzer(){
+		this.modelBuilder = new ModelBuilder();
+		this.classContainer = new ClassPath();
+		this.tempFile = RegularFile.createTempFile("lmu-", ".jar");
+		this.classLoader = new URLClassLoader(new URL[] { tempFile.toURL() });
+	}
+	
+	@Override
+	public Model classAnalysis(String path) {
+		RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
+		//jarFile.setContent(data);
+		return null;
+	}
+
+	@Override
+	public Model packageAnalysis(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model projectAnalysis(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model jarAnalysis(String path) throws ParseError {
+		try {
+			byte[] data = Files.readAllBytes(Paths.get(path));
+			tempFile.setContent(data);
+			classContainer.add(new ClassContainer(tempFile, classLoader));
+		} catch (IOException e) {
+			throw new IllegalStateException();
+		}
+		return createModel();
+	}
 
 	public Collection<RegularFile> getJarFiles()
 	{
@@ -59,43 +78,11 @@ public class Analyzer extends ModelFactory implements Analysis {
 	}
 
 	@Override
-	public Model createModel(String filePath) throws ParseError
+	public Model createModel() throws ParseError
 	{
-		
-
-		try
-		{
-
-			byte[] data = Files.readAllBytes(Paths.get(filePath));
-			// create a jar file on the disk from the binary data
-			RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
-			jarFile.setContent(data);
-			ClassLoader classLoader = new URLClassLoader(new URL[] { jarFile.toURL() });
-			ClassPath classContainers = new ClassPath();
-			classContainers.add(new ClassContainer(jarFile, classLoader));
-
-			for (RegularFile thisJarFile : this.knownJarFiles)
-			{
-				classContainers.add(new ClassContainer(thisJarFile, classLoader));
-			}
-
-
-			// at this only the name of entities is known
-			// neither members nor relation are known
-			// let's find them
-			
-			ModelBuilder modelBuilder = new ModelBuilder();
-			
-			Model model = modelBuilder.build(classContainers.listAllClasses());
-			
-			jarFile.delete();
-			
-			return model;
-		}
-		catch (IOException ex)
-		{
-			throw new IllegalStateException();
-		}
+		Model model = modelBuilder.build(classContainer.listAllClasses());
+		tempFile.delete();
+		return model;
 
 	}
 
@@ -131,11 +118,4 @@ public class Analyzer extends ModelFactory implements Analysis {
 		return c.getPackage() == null ? Entity.DEFAULT_NAMESPACE : c.getPackage().getName();
 	}
 
-	
-
-	public Model createModel(File file) throws ParseError, IOException
-	{
-		byte[] data = FileUtilities.getFileContent(file);
-		return createModel(data);
-	}
 }

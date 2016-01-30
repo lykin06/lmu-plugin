@@ -7,10 +7,10 @@ import org.lucci.lmu.input.ParseError;
 
 public interface Analysis {
 	
-	public void classAnalysis(String path, List<Class<?>> classes);
-	public void packageAnalysis(String path, List<Class<?>> classes);
-	public void projectAnalysis(String path, List<Class<?>> classes);
-	public void jarAnalysis(String path, List<Class<?>> classes);
-	public Model createModel(byte[] data) throws ParseError;
+	public Model classAnalysis(String path);
+	public Model packageAnalysis(String path);
+	public Model projectAnalysis(String path);
+	public Model jarAnalysis(String path) throws ParseError;
+	public Model createModel() throws ParseError;
 
 }

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.lucci.lmu.input.JarFileAnalyser;
 import org.lucci.lmu.input.ModelException;
 import org.lucci.lmu.input.ModelFactory;
 import org.lucci.lmu.input.ParseError;
@@ -25,6 +24,8 @@ public class Main {
 	 * @param diagram
 	 * @param f
 	 */
+	static String extension;
+	
 	private static void export(Model diagram, File f) {
 		try {
 			AbstractWriter factory = AbstractWriter.getTextFactory(FileChooser.getFileExtension(f.getName()));
@@ -41,7 +42,7 @@ public class Main {
 	}
 	
 	private static File checkInput(String input) throws IOException {
-		String extension = FileChooser.getFileExtension(input);
+		extension = FileChooser.getFileExtension(input);
 		if (extension.equals("jar")
 				|| extension.equals("java")) {
 			return new File(input);
@@ -77,11 +78,17 @@ public class Main {
 			// Check output
 			output = checkOutput(outputFileName);
 			
-			// Create Model
-			//diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
-			Analyzer jf = (Analyzer) Analyzer.getModelFactory("analyzer");
-			//diagram = jf.createModel(Files.readAllBytes(Paths.get(inputFileName)));
-			diagram = jf.createModel(inputFileName);
+			Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+			
+			
+			switch(extension){
+				case "java" :
+					break;
+				case "jar" :
+						diagram = analyzer.jarAnalysis(inputFileName);
+						break;
+					
+			}
 					
 			// Export Model
 			export(diagram, output);

@@ -8,10 +8,11 @@ import java.nio.file.Paths;
 
 import org.lucci.lmu.FileChooser;
 import org.lucci.lmu.Model;
-import org.lucci.lmu.input.JarFileAnalyser;
 import org.lucci.lmu.input.ParseError;
 import org.lucci.lmu.output.AbstractWriter;
 import org.lucci.lmu.output.WriterException;
+
+import analysis.Analyzer;
 
 public class Connector {
 	Model model;
@@ -20,10 +21,12 @@ public class Connector {
 		model = new Model();
 	}
 	
+	//FIXME : jarfileanalyzer -> analyzer
+	
 	public void exportJar(String jarLocation, String exportDir, String exportFormat)
 			throws ParseError, IOException, WriterException {
 		File output = new File(exportDir + exportFormat);
-		JarFileAnalyser jf = (JarFileAnalyser) JarFileAnalyser.getModelFactory("jar");
+		Analyzer jf = (Analyzer) Analyzer.getModelFactory("analyzer");
 		model = jf.createModel(Files.readAllBytes(Paths.get(jarLocation)));
 		AbstractWriter factory = AbstractWriter.getTextFactory(FileChooser.getFileExtension(output.getName()));
 		FileOutputStream fis = new FileOutputStream(output);

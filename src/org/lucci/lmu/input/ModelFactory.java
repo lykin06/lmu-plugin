@@ -29,5 +29,5 @@ public abstract class ModelFactory
 		return factoryMap.get(type);
 	}
 
-	public abstract Model createModel(String filePath) throws ParseError, ModelException;
+	public abstract Model createModel() throws ParseError, ModelException;
 }
