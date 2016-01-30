@@ -79,7 +79,8 @@ public class Main {
 			// Create Model
 			//diagram = LmuParser.getParser().createModel("load " + input.getAbsolutePath());
 			JarFileAnalyser jf = (JarFileAnalyser) JarFileAnalyser.getModelFactory("jar");
-			diagram = jf.createModel(Files.readAllBytes(Paths.get(inputFileName)));
+			//diagram = jf.createModel(Files.readAllBytes(Paths.get(inputFileName)));
+			diagram = jf.createModel(inputFileName);
 					
 			// Export Model
 			export(diagram, output);

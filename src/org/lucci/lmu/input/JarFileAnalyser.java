@@ -10,6 +10,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -54,13 +55,14 @@ public class JarFileAnalyser extends ModelFactory
 	}
 
 	@Override
-	public Model createModel(byte[] data) throws ParseError
+	public Model createModel(String filePath) throws ParseError
 	{
 		
 
 		try
 		{
 
+			byte[] data = Files.readAllBytes(Paths.get(filePath));
 			// create a jar file on the disk from the binary data
 			RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
 			jarFile.setContent(data);
