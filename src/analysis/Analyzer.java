@@ -1,6 +1,5 @@
 package analysis;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -21,7 +20,6 @@ import toools.ClassContainer;
 import toools.ClassName;
 import toools.ClassPath;
 import toools.Clazz;
-import toools.io.FileUtilities;
 import toools.io.file.RegularFile;
 
 public class Analyzer extends ModelFactory implements Analysis {

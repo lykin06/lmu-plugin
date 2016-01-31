@@ -1,6 +1,7 @@
 package org.lucci.lmu.script;
 
 import java.util.Collection;
+
 import java4unix.AbstractShellScript;
 import java4unix.ArgumentSpecification;
 import java4unix.License;

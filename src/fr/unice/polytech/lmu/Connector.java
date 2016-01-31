@@ -3,8 +3,6 @@ package fr.unice.polytech.lmu;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.lucci.lmu.FileChooser;
 import org.lucci.lmu.Model;

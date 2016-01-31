@@ -1,20 +1,13 @@
 package org.lucci.lmu;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.Vector;
-
-
 
 import org.lucci.lmu.input.ModelException;
 
 import toools.collections.Collections;
-import toools.collections.Filter;
 import toools.math.relation.HashRelation;
 
 /*

@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.lucci.lmu.Model;
 
-import toools.extern.ExternalProgram;
 import toools.extern.Proces;
 
 /*
