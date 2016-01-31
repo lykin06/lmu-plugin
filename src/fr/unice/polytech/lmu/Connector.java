@@ -16,19 +16,41 @@ import analysis.Analyzer;
 
 public class Connector {
 	Model model;
+	static String extension;
 	
 	public Connector() {
 		model = new Model();
 	}
 	
-	//FIXME : jarfileanalyzer -> analyzer
+	private static File checkInput(String input) throws IOException {
+		extension = FileChooser.getFileExtension(input);
+		if (extension.equals("jar")) {
+			return new File(input);
+		}
+		
+		throw new IOException("Bad input file extension");
+	}
 	
 	public void exportJar(String jarLocation, String exportDir, String exportFormat)
 			throws ParseError, IOException, WriterException {
+		File input = checkInput(jarLocation);
 		File output = new File(exportDir + exportFormat);
-		Analyzer jf = (Analyzer) Analyzer.getModelFactory("analyzer");
-		model = jf.createModel(Files.readAllBytes(Paths.get(jarLocation)));
+		
+		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+		
+		switch(extension){
+		case "java" :
+			break;
+		case "jar" :
+				model = analyzer.jarAnalysis(jarLocation);
+				break;
+		default :
+			break;					
+	}
+		
 		AbstractWriter factory = AbstractWriter.getTextFactory(FileChooser.getFileExtension(output.getName()));
+		
+		
 		FileOutputStream fis = new FileOutputStream(output);
 		fis.write(factory.writeModel(model));
 		fis.flush();

@@ -43,8 +43,7 @@ public class Main {
 	
 	private static File checkInput(String input) throws IOException {
 		extension = FileChooser.getFileExtension(input);
-		if (extension.equals("jar")
-				|| extension.equals("java")) {
+		if (extension.equals("jar")) {
 			return new File(input);
 		}
 		
