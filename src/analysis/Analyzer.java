@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
@@ -25,9 +24,7 @@ import toools.io.file.RegularFile;
 public class Analyzer extends ModelFactory implements Analysis {
 
 	private Collection<RegularFile> knownJarFiles = new HashSet<RegularFile>();
-	private Model model;
 	private ModelBuilder modelBuilder;
-	private List<Class<?>> classes;
 	ClassPath classContainer;
 	ClassLoader classLoader;
 	RegularFile tempFile;

@@ -31,8 +31,8 @@ public class Connector {
 	
 	public void exportJar(String jarLocation, String exportDir, String exportFormat)
 			throws ParseError, IOException, WriterException {
-		File input = checkInput(jarLocation);
-		File output = new File(exportDir + exportFormat);
+		checkInput(jarLocation);
+		File output = new File(exportDir + "." + exportFormat);
 		
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 		

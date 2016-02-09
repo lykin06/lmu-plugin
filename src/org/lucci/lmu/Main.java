@@ -61,12 +61,11 @@ public class Main {
 		Model diagram = new Model();
 		String inputFileName = args[0];
 		String outputFileName = args[1];
-		File input;
 		File output;
 		
 		try {
 			// Check input
-			input = checkInput(inputFileName);
+			checkInput(inputFileName);
 			
 			// Check output
 			output = checkOutput(outputFileName);

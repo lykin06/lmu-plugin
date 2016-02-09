@@ -12,31 +12,29 @@ import org.lucci.lmu.NamedModelElement;
 /**
  * @author luc.hogie
  */
-public class ModelException extends LmuException
-{
-    Collection<NamedModelElement> modelElementsInvolved;
-    
-    public ModelException(String s, String suggestion, NamedModelElement[] m)
-    {
-        super(-1, s, suggestion);
-        this.modelElementsInvolved = Arrays.asList(m);
-    }
+public class ModelException extends LmuException {
 
-    public Collection<NamedModelElement> getModelElementsInvolved()
-    {
-        return modelElementsInvolved;
-    }
+	private static final long serialVersionUID = 8337233099098642692L;
 
-    @Override
-    public String getMessage()
-    {
-        String s = super.getMessage();
-        
-        for (NamedModelElement me : this.modelElementsInvolved)
-        {
-            s += "\n- " + me.getName(); 
-        }
-        
-        return s;
-    }
+	Collection<NamedModelElement> modelElementsInvolved;
+
+	public ModelException(String s, String suggestion, NamedModelElement[] m) {
+		super(-1, s, suggestion);
+		this.modelElementsInvolved = Arrays.asList(m);
+	}
+
+	public Collection<NamedModelElement> getModelElementsInvolved() {
+		return modelElementsInvolved;
+	}
+
+	@Override
+	public String getMessage() {
+		String s = super.getMessage();
+
+		for (NamedModelElement me : this.modelElementsInvolved) {
+			s += "\n- " + me.getName();
+		}
+
+		return s;
+	}
 }
