@@ -13,7 +13,7 @@ public class DUBuilder {
 	
 	public DUBuilder(int distance) {
 		this.distance = distance;
-		this.root = new DeploymentUnit();
+		//this.root = new DeploymentUnit();
 	}
 	
 	public DUBuilder(int distance, DeploymentUnit root) {

@@ -174,7 +174,13 @@ public class Analyzer extends ModelFactory implements Analysis {
 		DeploymentUnit dependencies = buildDependencies(fileName, depList);
 		// TODO : put all the dependencies in a DeployementUnit Object for build
 
-		Model model = modelBuilder.buildDependencies(new DeploymentUnit("root"));
+		/*DeploymentUnit DU = new DeploymentUnit("root");
+		DeploymentUnit dep1 = new DeploymentUnit("dep1");
+		dep1.addDependency(new DeploymentUnit("dep1_1"));
+		dep1.addDependency(new DeploymentUnit("dep1_2"));
+		DU.addDependency(dep1);*/
+		
+		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;
 	}
 

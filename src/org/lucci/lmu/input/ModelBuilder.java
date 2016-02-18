@@ -38,7 +38,7 @@ public class ModelBuilder {
 		
 		Model model = new Model();
 		
-		for (DeploymentUnit dep : root.getDependencies())
+		/*for (DeploymentUnit dep : root.getDependencies())
 		{
 			// if this is not an anonymous inner class (a.b$1)
 			// we take it into account
@@ -49,7 +49,8 @@ public class ModelBuilder {
 				model.addEntity(entity);
 			}
 		}
-		linkUnits(model);
+		linkUnits(model);*/
+		root.DFSLinking(root, model);
 		return model;
 		
 	}
