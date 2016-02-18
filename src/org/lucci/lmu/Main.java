@@ -3,6 +3,7 @@ package org.lucci.lmu;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.JarFile;
@@ -81,7 +82,19 @@ public class Main {
 			final Attributes mattr = manifest.getMainAttributes();
 			for (Object key : mattr.keySet()) {
 				if (key != null && (key.toString()).contains("Import-Package")) {
-					System.out.println(mattr.getValue((Name) key));
+					String dependencies = mattr.getValue((Name) key);
+					String delims = ";";
+					String[] tokens = dependencies.split(delims);
+					String[] test = Arrays.copyOf(tokens, tokens.length-1);
+					for(int i = 1; i < test.length; i++) {
+						String temp = test[i];
+						String[] test2 = temp.split(",");
+						test[i] = test2[2];
+					}
+					
+					for(String s : test) {
+						System.out.println(s);
+					}
 				}
 			}
 		} else {
