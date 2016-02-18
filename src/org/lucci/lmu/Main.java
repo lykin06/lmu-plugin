@@ -3,11 +3,6 @@ package org.lucci.lmu;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.jar.Attributes;
-import java.util.jar.Attributes.Name;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import org.lucci.lmu.input.ParseError;
 import org.lucci.lmu.output.AbstractWriter;
@@ -59,7 +54,7 @@ public class Main {
 		throw new IOException("Bad output file extension");
 	}
 
-	private static Model createModel(String inputFileName) throws ParseError {
+	private static Model createClassModel(String inputFileName) throws ParseError {
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 
 		switch (extension) {
@@ -71,35 +66,11 @@ public class Main {
 			return null;
 		}
 	}
-
-	private static void dependencyAnalysis(String inputFileName) throws IOException {
-		JarFile input = new JarFile(inputFileName);
-		Manifest manifest = input.getManifest();
-
-		// Check if there is a manifest
-		if (manifest != null) {
-			System.out.println(manifest.toString());
-			final Attributes mattr = manifest.getMainAttributes();
-			for (Object key : mattr.keySet()) {
-				if (key != null && (key.toString()).contains("Import-Package")) {
-					String dependencies = mattr.getValue((Name) key);
-					String delims = ";";
-					String[] tokens = dependencies.split(delims);
-					String[] test = Arrays.copyOf(tokens, tokens.length-1);
-					for(int i = 1; i < test.length; i++) {
-						String temp = test[i];
-						String[] test2 = temp.split(",");
-						test[i] = test2[2];
-					}
-					
-					for(String s : test) {
-						System.out.println(s);
-					}
-				}
-			}
-		} else {
-			System.out.println("No Dependencies");
-		}
+	
+	private static Model createDependencyModel(String inputFileName) throws IOException {
+		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+		return analyzer.dependencyAnalysis(inputFileName);
+		
 	}
 
 	public static void main(String[] args) {
@@ -117,17 +88,17 @@ public class Main {
 			output = checkOutput(outputFileName);
 
 			if (mode.equals("classes")) {
-				// Create Model
-				diagram = createModel(inputFileName);
-
-				// Export Model
-				export(diagram, output);
+				// Create Class Model
+				diagram = createClassModel(inputFileName);
 			} else if (mode.equals("dependencies")) {
-				dependencyAnalysis(inputFileName);
+				// Create Dependency Model
+				diagram = createDependencyModel(inputFileName);
 			} else {
 				throw new Exception("Bad arguments given");
 			}
-
+			
+			// Export Model
+			export(diagram, output);
 			System.out.println("Done");
 
 		} catch (IOException e) {

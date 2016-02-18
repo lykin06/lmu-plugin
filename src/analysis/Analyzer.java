@@ -7,9 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.jar.Attributes.Name;
 
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
+import org.lucci.lmu.deployementUnit.DeploymentUnit;
 import org.lucci.lmu.input.ModelBuilder;
 import org.lucci.lmu.input.ModelFactory;
 import org.lucci.lmu.input.ParseError;
@@ -109,6 +114,36 @@ public class Analyzer extends ModelFactory implements Analysis {
 	public String computeEntityNamespace(Class<?> c)
 	{
 		return c.getPackage() == null ? Entity.DEFAULT_NAMESPACE : c.getPackage().getName();
+	}
+
+	private DeploymentUnit buildDependencies(String fileName) throws IOException{
+		JarFile input = new JarFile(fileName);
+		Manifest manifest = input.getManifest();
+
+		// Check if there is a manifest
+		if (manifest != null) {
+			System.out.println(manifest.toString());
+			final Attributes mattr = manifest.getMainAttributes();
+			for (Object key : mattr.keySet()) {
+				if (key != null && (key.toString()).contains("Import-Package")) {
+					System.out.println(mattr.getValue((Name) key));
+				}
+			}
+		} else {
+			System.out.println("No Dependencies");
+		}
+		return null;
+	}
+	
+	@Override
+	public Model dependencyAnalysis(String fileName) throws IOException{
+		
+		DeploymentUnit dependencies = buildDependencies(fileName);
+		//TODO : put all the dependencies in a DeployementUnit Object for build
+		
+		
+		Model model = modelBuilder.buildDependencies(new DeploymentUnit("root"));
+		return model;
 	}
 
 }

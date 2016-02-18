@@ -22,14 +22,41 @@ import org.lucci.lmu.InheritanceRelation;
 import org.lucci.lmu.Model;
 import org.lucci.lmu.Operation;
 import org.lucci.lmu.Visibility;
+import org.lucci.lmu.deployementUnit.DUBuilder;
+import org.lucci.lmu.deployementUnit.DeploymentUnit;
 
 public class ModelBuilder {
 	
-	
+	private DeploymentUnit root;
 	private Map<Class<?>, Entity> primitiveMap;
 	private Map<Entity, Class<?>> entity_class;
-
-
+	
+	public Model buildDependencies(DeploymentUnit root) {
+		primitiveMap = new HashMap<Class<?>, Entity>();
+		entity_class = new HashMap<Entity, Class<?>>();
+		this.root = root;
+		
+		Model model = new Model();
+		
+		for (DeploymentUnit dep : root.getDependencies())
+		{
+			// if this is not an anonymous inner class (a.b$1)
+			// we take it into account
+			if (!dep.getName().matches(".+\\$[0-9]+"))
+			{
+				Entity entity = new Entity();
+				entity.setName(dep.getName());
+				model.addEntity(entity);
+			}
+		}
+		linkUnits(model);
+		return model;
+		
+	}
+	
+	public void linkUnits(Model model){
+		//model.addAssociationRelation()
+	}
 	
 	public Model build(List <Class<?>> classes) {
 		primitiveMap = new HashMap<Class<?>, Entity>();
