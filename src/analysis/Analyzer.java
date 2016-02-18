@@ -5,12 +5,15 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.jar.Attributes;
+import java.util.jar.Attributes.Name;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.jar.Attributes.Name;
 
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
@@ -33,14 +36,14 @@ public class Analyzer extends ModelFactory implements Analysis {
 	ClassPath classContainer;
 	ClassLoader classLoader;
 	RegularFile tempFile;
-	
-	public Analyzer(){
+
+	public Analyzer() {
 		this.modelBuilder = new ModelBuilder();
 		this.classContainer = new ClassPath();
 		this.tempFile = RegularFile.createTempFile("lmu-", ".jar");
 		this.classLoader = new URLClassLoader(new URL[] { tempFile.toURL() });
 	}
-	
+
 	@Override
 	public Model classAnalysis(String path) throws ParseError {
 		return null;
@@ -70,27 +73,23 @@ public class Analyzer extends ModelFactory implements Analysis {
 		return createModel();
 	}
 
-	public Collection<RegularFile> getJarFiles()
-	{
+	public Collection<RegularFile> getJarFiles() {
 		return this.knownJarFiles;
 	}
 
 	@Override
-	public Model createModel() throws ParseError
-	{
+	public Model createModel() throws ParseError {
 		Model model = modelBuilder.build(classContainer.listAllClasses());
 		tempFile.delete();
 		return model;
 
 	}
 
-	protected static Class<?> createClassNamed(String fullName)
-	{
+	protected static Class<?> createClassNamed(String fullName) {
 		ClassName cn = Clazz.getClassName(fullName);
 		String src = "";
 
-		if (cn.pkg != null)
-		{
+		if (cn.pkg != null) {
 			src += "package " + cn.pkg + ";";
 		}
 
@@ -106,42 +105,75 @@ public class Analyzer extends ModelFactory implements Analysis {
 	 * System.out.println(createClassNamed("Coucou")); }
 	 */
 
-	public String computeEntityName(Class<?> c)
-	{
+	public String computeEntityName(Class<?> c) {
 		return c.getName().substring(c.getName().lastIndexOf('.') + 1);
 	}
 
-	public String computeEntityNamespace(Class<?> c)
-	{
+	public String computeEntityNamespace(Class<?> c) {
 		return c.getPackage() == null ? Entity.DEFAULT_NAMESPACE : c.getPackage().getName();
 	}
 
-	private DeploymentUnit buildDependencies(String fileName) throws IOException{
-		JarFile input = new JarFile(fileName);
-		Manifest manifest = input.getManifest();
-
-		// Check if there is a manifest
-		if (manifest != null) {
-			System.out.println(manifest.toString());
-			final Attributes mattr = manifest.getMainAttributes();
-			for (Object key : mattr.keySet()) {
-				if (key != null && (key.toString()).contains("Import-Package")) {
-					System.out.println(mattr.getValue((Name) key));
-				}
-			}
-		} else {
-			System.out.println("No Dependencies");
+	private String[] cleanDependencies(String dependencies) {
+		String[] tokens = dependencies.split(";");
+		String[] test = Arrays.copyOf(tokens, tokens.length - 1);
+		for (int i = 1; i < test.length; i++) {
+			String temp = test[i];
+			String[] test2 = temp.split(",");
+			test[i] = test2[2];
 		}
-		return null;
+
+		return test;
 	}
-	
+
+	private boolean containsDep(List<String> depList, String name) {
+		for (String d : depList) {
+			if (d != null && d.equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private DeploymentUnit buildDependencies(String fileName, List<String> depList) {
+		DeploymentUnit du = new DeploymentUnit(fileName);
+		depList.add(fileName);
+
+		try {
+			JarFile input = new JarFile(fileName);
+			Manifest manifest = input.getManifest();
+
+			// Check if there is a manifest
+			if (manifest != null) {
+				// Find the dependencies
+				final Attributes mattr = manifest.getMainAttributes();
+				for (Object key : mattr.keySet()) {
+					if (key != null && (key.toString()).contains("Import-Package")) {
+						String[] dependencies = cleanDependencies(mattr.getValue((Name) key));
+						for (String d : dependencies) {
+							if (!containsDep(depList, d)) {
+								depList.add(d);
+								du.getDependencies().add(buildDependencies(d, depList));
+							}
+						}
+					}
+				}
+			} else {
+				System.out.println("No Dependencies");
+			}
+		} catch (IOException e) {
+			//e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
+		return du;
+	}
+
 	@Override
-	public Model dependencyAnalysis(String fileName) throws IOException{
-		
-		DeploymentUnit dependencies = buildDependencies(fileName);
-		//TODO : put all the dependencies in a DeployementUnit Object for build
-		
-		
+	public Model dependencyAnalysis(String fileName) throws IOException {
+		List<String> depList = new ArrayList<>();
+		DeploymentUnit dependencies = buildDependencies(fileName, depList);
+		// TODO : put all the dependencies in a DeployementUnit Object for build
+
 		Model model = modelBuilder.buildDependencies(new DeploymentUnit("root"));
 		return model;
 	}
