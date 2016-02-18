@@ -58,7 +58,7 @@ public class Main {
 		throw new IOException("Bad output file extension");
 	}
 
-	private static Model createModel(String inputFileName) throws ParseError {
+	private static Model createClassModel(String inputFileName) throws ParseError {
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 
 		switch (extension) {
@@ -70,23 +70,11 @@ public class Main {
 			return null;
 		}
 	}
-
-	private static void dependencyAnalysis(String inputFileName) throws IOException {
-		JarFile input = new JarFile(inputFileName);
-		Manifest manifest = input.getManifest();
-
-		// Check if there is a manifest
-		if (manifest != null) {
-			System.out.println(manifest.toString());
-			final Attributes mattr = manifest.getMainAttributes();
-			for (Object key : mattr.keySet()) {
-				if (key != null && (key.toString()).contains("Import-Package")) {
-					System.out.println(mattr.getValue((Name) key));
-				}
-			}
-		} else {
-			System.out.println("No Dependencies");
-		}
+	
+	private static Model createDependencyModel(String inputFileName) throws IOException {
+		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+		return analyzer.dependencyAnalysis(inputFileName);
+		
 	}
 
 	public static void main(String[] args) {
@@ -104,17 +92,17 @@ public class Main {
 			output = checkOutput(outputFileName);
 
 			if (mode.equals("classes")) {
-				// Create Model
-				diagram = createModel(inputFileName);
-
-				// Export Model
-				export(diagram, output);
+				// Create Class Model
+				diagram = createClassModel(inputFileName);
 			} else if (mode.equals("dependencies")) {
-				dependencyAnalysis(inputFileName);
+				// Create Dependency Model
+				diagram = createDependencyModel(inputFileName);
 			} else {
 				throw new Exception("Bad arguments given");
 			}
-
+			
+			// Export Model
+			export(diagram, output);
 			System.out.println("Done");
 
 		} catch (IOException e) {
