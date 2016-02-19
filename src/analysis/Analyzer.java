@@ -88,7 +88,7 @@ public class Analyzer extends ModelFactory implements Analysis {
 
 	@Override
 	public Model createModel() throws ParseError {
-		Model model = modelBuilder.build(classContainer.listAllClasses());
+		Model model = modelBuilder.buildUML(classContainer.listAllClasses());
 		tempFile.delete();
 		return model;
 

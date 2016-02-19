@@ -68,10 +68,10 @@ public class DeploymentUnit {
 		model.addEntity(parent);
 		for(DeploymentUnit dep : dU.getDependencies()){
 			if(!dep.isMarked()){
-				Entity entity = new Entity();
-				entity.setName(dep.getName());
-				model.addEntity(entity);
-				model.addRelation(new AssociationRelation(parent,entity));
+				Entity child = new Entity();
+				child.setName(dep.getName());
+				model.addEntity(child);
+				model.addRelation(new AssociationRelation(parent,child));
 				DFSLinking(dep, model);
 			}
 		}
