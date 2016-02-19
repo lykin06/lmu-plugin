@@ -173,14 +173,9 @@ public class Analyzer extends ModelFactory implements Analysis {
 	private DeploymentUnit buildDependencies(String fileName, List<String> depList, int level) {
 		DeploymentUnit du = new DeploymentUnit(fileName);
 		System.out.println(fileName);
-		// depList.add(fileName);
 
 		try {
-			// findFile(fileName);
 			JarFile input = new JarFile(fileName);
-			// File currentDirFile = new File(".");
-			// String helper = currentDirFile.getAbsolutePath();
-			// System.out.println(helper);
 			Manifest manifest = input.getManifest();
 
 			// Check if there is a manifest
@@ -205,10 +200,6 @@ public class Analyzer extends ModelFactory implements Analysis {
 								} else {
 									du.getDependencies().add(new DeploymentUnit(d));
 								}
-								// File f = new File(System.getProperty(d));
-								// File dir =
-								// f.getAbsoluteFile().getParentFile();
-								// System.out.println(dir.toString());
 							}
 						}
 					}
@@ -217,8 +208,7 @@ public class Analyzer extends ModelFactory implements Analysis {
 				System.out.println("No Dependencies");
 			}
 		} catch (IOException e) {
-			// e.printStackTrace();
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 
 		return du;
