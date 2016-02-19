@@ -40,7 +40,7 @@ public class ModelBuilder {
 		return model;
 	}
 	
-	public Model build(List <Class<?>> classes) {
+	public Model buildUML(List <Class<?>> classes) {
 		primitiveMap = new HashMap<Class<?>, Entity>();
 		entity_class = new HashMap<Entity, Class<?>>();
 		
