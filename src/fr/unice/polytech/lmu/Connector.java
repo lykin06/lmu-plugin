@@ -58,13 +58,13 @@ public class Connector {
 		output(outputFileName, model);
 	}
 
-	public void jarDenpendencies(String jarLocation, String exportDir, String exportFormat, String pluginDir)
+	public void jarDenpendencies(String jarLocation, String exportDir, String exportFormat, String pluginDir, int level)
 			throws IOException, WriterException {
 		checkInput(jarLocation);
 		String outputFileName = exportDir + "." + exportFormat;
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 		analyzer.setPluginDir(pluginDir);
-		model = analyzer.dependencyAnalysis(jarLocation);
+		model = analyzer.dependencyAnalysis(jarLocation, level);
 		output(outputFileName, model);
 	}
 }

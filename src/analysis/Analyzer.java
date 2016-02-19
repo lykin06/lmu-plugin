@@ -215,10 +215,10 @@ public class Analyzer extends ModelFactory implements Analysis {
 	}
 
 	@Override
-	public Model dependencyAnalysis(String fileName) throws IOException {
+	public Model dependencyAnalysis(String fileName, int level) throws IOException {
 		List<String> depList = new ArrayList<>();
 		depList.add(fileName);
-		DeploymentUnit dependencies = buildDependencies(fileName, depList, 1);
+		DeploymentUnit dependencies = buildDependencies(fileName, depList, level);
 		System.out.println("done dependencies");
 		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;

@@ -70,7 +70,8 @@ public class Main {
 	private static Model createDependencyModel(String inputFileName, String pluginDir) throws IOException {
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 		analyzer.setPluginDir(pluginDir);
-		return analyzer.dependencyAnalysis(inputFileName);
+		int dependencyLevel = 0;
+		return analyzer.dependencyAnalysis(inputFileName, dependencyLevel);
 	}
 
 	public static void main(String[] args) {
