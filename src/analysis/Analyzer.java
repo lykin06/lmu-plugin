@@ -177,9 +177,7 @@ public class Analyzer extends ModelFactory implements Analysis {
 	public Model dependencyAnalysis(String fileName) throws IOException {
 		List<String> depList = new ArrayList<>();
 		DeploymentUnit dependencies = buildDependencies(fileName, depList);
-		// TODO : put all the dependencies in a DeployementUnit Object for build
-
-		Model model = modelBuilder.buildDependencies(new DeploymentUnit("root"));
+		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;
 	}
 
