@@ -219,7 +219,9 @@ public class Analyzer extends ModelFactory implements Analysis {
 		List<String> depList = new ArrayList<>();
 		depList.add(fileName);
 		DeploymentUnit dependencies = buildDependencies(fileName, depList, 1);
-		System.out.println("done dependencies");
+		
+		System.out.println("done dependencies\n\n");
+		System.out.println(dependencies);
 		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;
 	}
