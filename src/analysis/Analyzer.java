@@ -1,5 +1,6 @@
 package analysis;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -153,6 +154,10 @@ public class Analyzer extends ModelFactory implements Analysis {
 							if (!containsDep(depList, d)) {
 								depList.add(d);
 								du.getDependencies().add(buildDependencies(d, depList));
+								//System.out.println(d);
+								//File f = new File(System.getProperty(d));
+								//File dir = f.getAbsoluteFile().getParentFile();
+								//System.out.println(dir.toString());
 							}
 						}
 					}
