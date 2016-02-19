@@ -70,21 +70,23 @@ public class Main {
 	private static Model createDependencyModel(String inputFileName, String pluginDir) throws IOException {
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
 		analyzer.setPluginDir(pluginDir);
-		int dependencyLevel = 0;
+		int dependencyLevel = 1;
 		return analyzer.dependencyAnalysis(inputFileName, dependencyLevel);
 	}
 
 	public static void main(String[] args) {
 		Model diagram = new Model();
 		String inputFileName = "./input/lmu-eclipse-plugin_1.0.0.201602020956.jar";
-				// "./input/log4j-api-2.5.jar";
+		// "./input/log4j-api-2.5.jar";
 		// "./input/lmu-dependencies_1.0.0.jar";
 		// args[0];
 		String outputFileName = args[1];
 		String mode = args[2];
 
 		// Set your plugin directory
-		String pluginDir = "/home/louis/eclipse_modeling/plugins";
+		String pluginDir = "/home/mathieu/Apps/eclipse/Modeling/plugins";
+
+		// "/home/louis/eclipse_modeling/plugins";
 
 		File output;
 

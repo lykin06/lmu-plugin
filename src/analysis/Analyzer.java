@@ -134,7 +134,10 @@ public class Analyzer extends ModelFactory implements Analysis {
 			}
 			if (s.contains(";")) {
 				String[] temp = s.split(";");
-				dep.add(temp[0]);
+				// System.out.println(s);
+				if (!temp[0].contains("\"")) {
+					dep.add(temp[0]);
+				}
 				continue;
 			}
 		}
@@ -219,9 +222,9 @@ public class Analyzer extends ModelFactory implements Analysis {
 		List<String> depList = new ArrayList<>();
 		depList.add(fileName);
 		DeploymentUnit dependencies = buildDependencies(fileName, depList, level);
-		
+
 		System.out.println("done dependencies\n\n");
-		System.out.println(dependencies);
+		System.out.println(dependencies.toString());
 		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;
 	}
