@@ -1,5 +1,6 @@
 package analysis;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -151,14 +152,31 @@ public class Analyzer extends ModelFactory implements Analysis {
 	}
 
 	private String findFile(String dependency) {
+		File folder = new File(pluginDir);
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				String name = listOfFiles[i].getName();
+				if (name.startsWith(dependency + "_")) {
+					System.out.println("File " + listOfFiles[i].getName());
+					return listOfFiles[i].getName();
+				}
+			}
+			// } else if (listOfFiles[i].isDirectory()) {
+			// System.out.println("Directory " + listOfFiles[i].getName());
+			// }
+		}
 		return null;
 	}
 
-	private DeploymentUnit buildDependencies(String fileName, List<String> depList) {
+	private DeploymentUnit buildDependencies(String fileName, List<String> depList, int level) {
 		DeploymentUnit du = new DeploymentUnit(fileName);
-		depList.add(fileName);
+		System.out.println(fileName);
+		// depList.add(fileName);
 
 		try {
+			// findFile(fileName);
 			JarFile input = new JarFile(fileName);
 			// File currentDirFile = new File(".");
 			// String helper = currentDirFile.getAbsolutePath();
@@ -177,9 +195,16 @@ public class Analyzer extends ModelFactory implements Analysis {
 						for (String d : dependencies) {
 							if (!containsDep(depList, d)) {
 								// System.out.println(d);
-
 								depList.add(d);
-								du.getDependencies().add(buildDependencies(d, depList));
+								String depFile = findFile(d);
+								if ((depFile != null) && (level > 0)) {
+									DeploymentUnit duDep = buildDependencies(pluginDir + "/" + depFile, depList,
+											level - 1);
+									duDep.setName(d);
+									du.getDependencies().add(duDep);
+								} else {
+									du.getDependencies().add(new DeploymentUnit(d));
+								}
 								// File f = new File(System.getProperty(d));
 								// File dir =
 								// f.getAbsoluteFile().getParentFile();
@@ -202,7 +227,9 @@ public class Analyzer extends ModelFactory implements Analysis {
 	@Override
 	public Model dependencyAnalysis(String fileName) throws IOException {
 		List<String> depList = new ArrayList<>();
-		DeploymentUnit dependencies = buildDependencies(fileName, depList);
+		depList.add(fileName);
+		DeploymentUnit dependencies = buildDependencies(fileName, depList, 1);
+		System.out.println("done dependencies");
 		Model model = modelBuilder.buildDependencies(dependencies);
 		return model;
 	}

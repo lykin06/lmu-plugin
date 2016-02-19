@@ -75,13 +75,15 @@ public class Main {
 
 	public static void main(String[] args) {
 		Model diagram = new Model();
-		String inputFileName = "./input/lmu-dependencies_1.0.0.jar";
-		// "./input/log4j-api-2.5.jar"; //args[0];
+		String inputFileName = "./input/lmu-eclipse-plugin_1.0.0.201602020956.jar";
+				// "./input/log4j-api-2.5.jar";
+		// "./input/lmu-dependencies_1.0.0.jar";
+		// args[0];
 		String outputFileName = args[1];
 		String mode = args[2];
 
 		// Set your plugin directory
-		String pluginDir = "/home/Apps/eclipse/Modeling/plugins";
+		String pluginDir = "/home/mathieu/Apps/eclipse/Modeling/plugins";
 
 		File output;
 
