@@ -84,7 +84,7 @@ public class Main {
 		String mode = args[2];
 
 		// Set your plugin directory
-		String pluginDir = "/home/mathieu/Apps/eclipse/Modeling/plugins";
+		String pluginDir = "/home/louis/eclipse_modeling/plugins";
 
 		File output;
 

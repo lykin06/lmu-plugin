@@ -58,6 +58,14 @@ public class DeploymentUnit {
 		return this.visited;
 	}
 	
+	public String toString(){
+		System.out.println(this.name);
+		for(DeploymentUnit dep : dependencies){
+			System.out.println(dep);
+		}
+		return this.name;
+	}
+	
 	/**
 	 * Depth First Search to link all the deps
 	 */
