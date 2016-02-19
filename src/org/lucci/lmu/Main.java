@@ -75,7 +75,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		Model diagram = new Model();
-		String inputFileName = args[0];
+		String inputFileName = "./input/lmu-dependencies_1.0.0.jar";
+				//"./input/log4j-api-2.5.jar"; //args[0];
 		String outputFileName = args[1];
 		String mode = args[2];
 		File output;

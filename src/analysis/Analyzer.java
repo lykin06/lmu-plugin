@@ -1,6 +1,5 @@
 package analysis;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -114,16 +113,24 @@ public class Analyzer extends ModelFactory implements Analysis {
 		return c.getPackage() == null ? Entity.DEFAULT_NAMESPACE : c.getPackage().getName();
 	}
 
-	private String[] cleanDependencies(String dependencies) {
-		String[] tokens = dependencies.split(";");
-		String[] test = Arrays.copyOf(tokens, tokens.length - 1);
-		for (int i = 1; i < test.length; i++) {
-			String temp = test[i];
-			String[] test2 = temp.split(",");
-			test[i] = test2[2];
+	private List<String> cleanDependencies(String dependencies) {
+		String[] tokens = dependencies.split(",");
+		List<String> dep = new ArrayList<String>();
+		
+//		String[] test = Arrays.copyOf(tokens, tokens.length - 1);
+		for (String s : tokens) {
+			if (s.endsWith(".jar")) {
+				dep.add(s);
+				continue;
+			}
+			if (s.contains(";")) {
+				String[] temp = s.split(";");
+				dep.add(temp[0]);
+				continue;
+			}
 		}
 
-		return test;
+		return dep;
 	}
 
 	private boolean containsDep(List<String> depList, String name) {
@@ -148,16 +155,19 @@ public class Analyzer extends ModelFactory implements Analysis {
 				// Find the dependencies
 				final Attributes mattr = manifest.getMainAttributes();
 				for (Object key : mattr.keySet()) {
-					if (key != null && (key.toString()).contains("Import-Package")) {
-						String[] dependencies = cleanDependencies(mattr.getValue((Name) key));
+					if (key != null && ((key.toString()).contains("Import-Package")
+							|| (key.toString()).contains("Bundle-ClassPath") || (key.toString()).contains("Class-Path")
+							|| (key.toString()).contains("Require-Bundle"))) {
+						List<String> dependencies = cleanDependencies(mattr.getValue((Name) key));
 						for (String d : dependencies) {
 							if (!containsDep(depList, d)) {
+								//System.out.println(d);
 								depList.add(d);
 								du.getDependencies().add(buildDependencies(d, depList));
-								//System.out.println(d);
-								//File f = new File(System.getProperty(d));
-								//File dir = f.getAbsoluteFile().getParentFile();
-								//System.out.println(dir.toString());
+								// File f = new File(System.getProperty(d));
+								// File dir =
+								// f.getAbsoluteFile().getParentFile();
+								// System.out.println(dir.toString());
 							}
 						}
 					}
@@ -166,7 +176,7 @@ public class Analyzer extends ModelFactory implements Analysis {
 				System.out.println("No Dependencies");
 			}
 		} catch (IOException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
 
