@@ -6,7 +6,6 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -36,12 +35,21 @@ public class Analyzer extends ModelFactory implements Analysis {
 	ClassPath classContainer;
 	ClassLoader classLoader;
 	RegularFile tempFile;
+	private String pluginDir;
 
 	public Analyzer() {
 		this.modelBuilder = new ModelBuilder();
 		this.classContainer = new ClassPath();
 		this.tempFile = RegularFile.createTempFile("lmu-", ".jar");
 		this.classLoader = new URLClassLoader(new URL[] { tempFile.toURL() });
+	}
+
+	public String getPluginDir() {
+		return pluginDir;
+	}
+
+	public void setPluginDir(String pluginDir) {
+		this.pluginDir = pluginDir;
 	}
 
 	@Override
@@ -116,8 +124,8 @@ public class Analyzer extends ModelFactory implements Analysis {
 	private List<String> cleanDependencies(String dependencies) {
 		String[] tokens = dependencies.split(",");
 		List<String> dep = new ArrayList<String>();
-		
-//		String[] test = Arrays.copyOf(tokens, tokens.length - 1);
+
+		// String[] test = Arrays.copyOf(tokens, tokens.length - 1);
 		for (String s : tokens) {
 			if (s.endsWith(".jar")) {
 				dep.add(s);
@@ -142,12 +150,19 @@ public class Analyzer extends ModelFactory implements Analysis {
 		return false;
 	}
 
+	private String findFile(String dependency) {
+		return null;
+	}
+
 	private DeploymentUnit buildDependencies(String fileName, List<String> depList) {
 		DeploymentUnit du = new DeploymentUnit(fileName);
 		depList.add(fileName);
 
 		try {
 			JarFile input = new JarFile(fileName);
+			// File currentDirFile = new File(".");
+			// String helper = currentDirFile.getAbsolutePath();
+			// System.out.println(helper);
 			Manifest manifest = input.getManifest();
 
 			// Check if there is a manifest
@@ -161,7 +176,8 @@ public class Analyzer extends ModelFactory implements Analysis {
 						List<String> dependencies = cleanDependencies(mattr.getValue((Name) key));
 						for (String d : dependencies) {
 							if (!containsDep(depList, d)) {
-								//System.out.println(d);
+								// System.out.println(d);
+
 								depList.add(d);
 								du.getDependencies().add(buildDependencies(d, depList));
 								// File f = new File(System.getProperty(d));

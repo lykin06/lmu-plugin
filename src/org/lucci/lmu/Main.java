@@ -66,19 +66,23 @@ public class Main {
 			return null;
 		}
 	}
-	
-	private static Model createDependencyModel(String inputFileName) throws IOException {
+
+	private static Model createDependencyModel(String inputFileName, String pluginDir) throws IOException {
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+		analyzer.setPluginDir(pluginDir);
 		return analyzer.dependencyAnalysis(inputFileName);
-		
 	}
 
 	public static void main(String[] args) {
 		Model diagram = new Model();
 		String inputFileName = "./input/lmu-dependencies_1.0.0.jar";
-				//"./input/log4j-api-2.5.jar"; //args[0];
+		// "./input/log4j-api-2.5.jar"; //args[0];
 		String outputFileName = args[1];
 		String mode = args[2];
+
+		// Set your plugin directory
+		String pluginDir = "/home/Apps/eclipse/Modeling/plugins";
+
 		File output;
 
 		try {
@@ -93,11 +97,11 @@ public class Main {
 				diagram = createClassModel(inputFileName);
 			} else if (mode.equals("dependencies")) {
 				// Create Dependency Model
-				diagram = createDependencyModel(inputFileName);
+				diagram = createDependencyModel(inputFileName, pluginDir);
 			} else {
 				throw new Exception("Bad arguments given");
 			}
-			
+
 			// Export Model
 			export(diagram, output);
 			System.out.println("Done");

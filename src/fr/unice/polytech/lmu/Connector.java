@@ -28,7 +28,7 @@ public class Connector {
 
 		throw new IOException("Bad input file extension");
 	}
-	
+
 	private static void output(String outputFileName, Model model) throws IOException, WriterException {
 		File output = new File(outputFileName);
 		AbstractWriter factory = AbstractWriter.getTextFactory(FileChooser.getFileExtension(output.getName()));
@@ -54,15 +54,16 @@ public class Connector {
 		default:
 			break;
 		}
-		
+
 		output(outputFileName, model);
 	}
-	
-	public void jarDenpendencies(String jarLocation, String exportDir, String exportFormat)
+
+	public void jarDenpendencies(String jarLocation, String exportDir, String exportFormat, String pluginDir)
 			throws IOException, WriterException {
 		checkInput(jarLocation);
 		String outputFileName = exportDir + "." + exportFormat;
 		Analyzer analyzer = (Analyzer) Analyzer.getModelFactory("analyzer");
+		analyzer.setPluginDir(pluginDir);
 		model = analyzer.dependencyAnalysis(jarLocation);
 		output(outputFileName, model);
 	}
